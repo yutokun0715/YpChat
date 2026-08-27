@@ -21,12 +21,7 @@ HTML / CSS / JavaScript + Firebase の実装土台です。
 - Firebase Cloud Messagingの土台
 - WebRTC配信を追加できる構成
 - Discord / Roblox連携のUI土台
-
-## 重要
-
-Discord / RobloxのOAuthや「現在プレイ中」の取得は、各サービスのOAuth/API仕様に従ってサーバー側処理が必要です。
-アクセストークンやClient SecretをブラウザJSに書かないでください。
-
+  
 ## Firebase設定
 
 1. Firebase ConsoleでWebアプリを追加。
@@ -51,7 +46,3 @@ file:// 直開きではなくHTTPSまたはlocalhostで動かしてください�
 - Firebase Hosting
 - VS Code Live Server
 - `python -m http.server`
-
-## 注意
-
-このv0.5は「一式の実装土台」です。本番公開前にSecurity Rules、レート制限、モデレーション、通知送信のサーバー処理、OAuth連携、WebRTCのシグナリング/認証を追加で固めてください。
