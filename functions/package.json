@@ -1,0 +1,11 @@
+{
+  "name": "ypchat-functions",
+  "private": true,
+  "engines": {
+    "node": 20
+  },
+  "dependencies": {
+    "firebase-admin": "latest",
+    "firebase-functions": "latest"
+  }
+}
