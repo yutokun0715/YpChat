@@ -1,9 +1,0 @@
-{
-    "name": "YpChat",
-    "short_name": "YpChat",
-    "start_url": "./index.html",
-    "display": "standalone",
-    "background_color": "#111318",
-    "theme_color": "#111318",
-    "description": "YpChat realtime chat service"
-}
