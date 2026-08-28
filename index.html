@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#10131a">
+  <link rel="manifest" href="manifest.json">
+  <title>YpChat</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="loginScreen" class="screen">
+    <div class="login-card">
+      <div class="brand">YpChat</div>
+      <p>みんなで話せるリアルタイムチャット</p>
+      <button id="msLogin" class="primary">Googleアカウントでログイン</button>
+      <button id="guestLogin" class="secondary">ログインせずに続ける</button>
+      <p class="small">フレンド・DM・ルーム作成などはログインが必要です。</p>
+      <div id="loginError" class="error"></div>
+    </div>
+  </div>
+
+  <div id="app" class="hidden">
+    <header class="topbar">
+      <button id="mobileMenu" class="icon-btn">☰</button>
+      <div class="brand small-brand">YpChat</div>
+      <div class="top-user">
+        <span id="presenceDot" class="dot"></span>
+        <span id="topName">Guest</span>
+        <button id="profileBtn" class="avatar-btn">●</button>
+      </div>
+    </header>
+
+    <div class="shell">
+      <aside id="sidebar" class="sidebar">
+        <button class="nav active" data-page="home">🏠 ホーム</button>
+        <button class="nav" data-page="friends">👥 フレンド</button>
+        <button class="nav" data-page="dms">💌 DM</button>
+        <button class="nav" data-page="settings">⚙️ 設定</button>
+        <hr>
+        <div class="side-title">参加中のルーム</div>
+        <div id="roomList"></div>
+        <button id="newRoom" class="room-create">＋ ルーム作成</button>
+        <div class="side-bottom">
+          <button id="logout" class="nav">↪ ログアウト</button>
+        </div>
+      </aside>
+
+      <main class="content">
+        <section id="page-home" class="page">
+          <div class="hero">
+            <h1>YpChatへようこそ 👋</h1>
+            <p>ルームを作って、リアルタイムで話そう。</p>
+          </div>
+          <div class="card">
+            <div class="row-between"><h2>公開ルーム</h2><button id="refreshRooms" class="secondary small-btn">更新</button></div>
+            <div id="publicRooms" class="room-grid"></div>
+          </div>
+        </section>
+
+        <section id="page-chat" class="page hidden">
+          <div class="chat-head">
+            <div>
+              <h2 id="chatRoomName">ルーム</h2>
+              <div id="chatRoomMeta" class="muted"></div>
+            </div>
+            <button id="roomSettings" class="secondary">⚙️</button>
+          </div>
+          <div id="messages" class="messages"></div>
+          <div id="typing" class="typing"></div>
+          <div class="composer">
+            <button id="stampBtn" class="icon-btn">😀</button>
+            <textarea id="messageInput" rows="1" placeholder="メッセージ… Markdown対応"></textarea>
+            <button id="sendBtn" class="send">➤</button>
+          </div>
+        </section>
+
+        <section id="page-friends" class="page hidden">
+          <h1>👥 フレンド</h1>
+          <div class="card">
+            <div class="search-row">
+              <input id="friendName" placeholder="名前で検索">
+              <button id="searchFriend" class="primary">検索</button>
+            </div>
+            <div id="friendResults"></div>
+          </div>
+          <div class="card">
+            <h2>申請</h2><div id="friendRequests"></div>
+          </div>
+          <div class="card">
+            <h2>フレンド一覧</h2><div id="friends"></div>
+          </div>
+        </section>
+
+        <section id="page-dms" class="page hidden">
+          <h1>💌 DM</h1>
+          <div class="dm-layout">
+            <div id="dmPeople" class="dm-people card"></div>
+            <div class="dm-chat card">
+              <div id="dmTitle" class="chat-head"><h2>DMを選択</h2></div>
+              <div id="dmMessages" class="messages"></div>
+              <div class="composer">
+                <textarea id="dmInput" rows="1" placeholder="DM… Markdown対応"></textarea>
+                <button id="dmSend" class="send">➤</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="page-settings" class="page hidden">
+          <h1>⚙️ 設定</h1>
+          <div class="card form">
+            <label>表示名<input id="displayName"></label>
+            <label>プレート色<input id="plateColor" type="color"></label>
+            <label>フォント
+              <select id="fontName">
+                <option value="system">標準</option>
+                <option value="sans-serif">Sans Serif</option>
+                <option value="serif">Serif</option>
+                <option value="monospace">Monospace</option>
+              </select>
+            </label>
+            <label>オンライン表示
+              <select id="onlineVisibility"><option value="visible">表示</option><option value="hidden">隠す</option></select>
+            </label>
+            <label>ステータス
+              <select id="status"><option value="online">オンライン</option><option value="away">離席中</option><option value="dnd">取り込み中</option><option value="offline">オフライン表示</option></select>
+            </label>
+            <label>DM受信
+              <select id="dmPolicy"><option value="friends">フレンドのみ</option><option value="everyone">誰でも</option><option value="none">受け付けない</option></select>
+            </label>
+            <button id="saveSettings" class="primary">保存</button>
+            <hr>
+            <h2>外部アカウント連携</h2>
+            <p class="muted">メインログインはGoogleアカウント。連携は今後のプレゼンス取得用に保存します。</p>
+            <button id="linkGithub" class="secondary">GitHubを連携</button>
+            <button id="linkGoogle" class="secondary">Googleアカウントでログイン</button>
+            <div id="integrationStatus"></div>
+            <hr>
+            <h2>通知</h2>
+            <button id="enablePush" class="secondary">🔔 プッシュ通知を有効化</button>
+            <span id="pushState" class="muted"></span>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <dialog id="roomDialog">
+    <form method="dialog" id="roomForm" class="dialog">
+      <h2>ルーム作成</h2>
+      <label>ルーム名<input id="newRoomName" required maxlength="80"></label>
+      <label>参加方式
+        <select id="joinMode">
+          <option value="public">公開（ホームに表示）</option>
+          <option value="url">URL参加</option>
+          <option value="approval">管理者承認</option>
+          <option value="password">アクセスパスワード</option>
+        </select>
+      </label>
+      <label id="accessPasswordWrap" class="hidden">アクセスパスワード<input id="accessPassword" type="password" minlength="4"></label>
+      <label>管理者パスワード<input id="adminPassword" type="password" minlength="8" required></label>
+      <div class="dialog-actions"><button value="cancel" class="secondary">キャンセル</button><button id="createRoomSubmit" value="default" class="primary">作成</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="adminDialog">
+    <div class="dialog">
+      <div class="row-between"><h2>ルーム管理</h2><button class="secondary" onclick="adminDialog.close()">閉じる</button></div>
+      <div id="adminPanel"></div>
+    </div>
+  </dialog>
+
+  <dialog id="noticeDialog"><div class="dialog"><h2 id="noticeTitle">YpChat</h2><p id="noticeText"></p><button class="primary" onclick="noticeDialog.close()">OK</button></div></dialog>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
